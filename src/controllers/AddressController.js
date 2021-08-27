@@ -8,8 +8,8 @@ module.exports = {
       include: { association: 'addresses'}
     })
 
-    return res.json(user)
-    // return res.json(user.addresses)
+    // return res.json(user)
+    return res.json(user.addresses)
   },
 
   async store(req, res){
