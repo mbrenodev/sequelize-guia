@@ -14,7 +14,7 @@ module.exports = {
         { 
           association: 'addresses',
           attributes: ['street', 'zipcode', 'number'], 
-          where: { street: 'Rua Rio Xingu' }},
+          where: { street: 'Av Rio Tocantins' }},
         { 
           association: 'techs',
           attributes: ['name'],
@@ -24,7 +24,7 @@ module.exports = {
           },
           where: {
             name: {
-              [Op.like]: 'react%' 
+              [Op.like]: 'Delphi%' 
             }
           }
         }

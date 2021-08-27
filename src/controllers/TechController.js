@@ -4,6 +4,8 @@ const Tech = require("../models/Tech");
 module.exports = {
   async index(req, res){
     const { user_id } = req.params;
+
+   
     const user = await User.findByPk(user_id, {
       // include: { association: 'techs'}
       include: { 
@@ -14,6 +16,10 @@ module.exports = {
         }
       }
     })
+
+    if(!user){
+      return res.status(400).json({ error: 'User not found' })
+    }
 
     return res.json(user.techs)
   },
@@ -54,5 +60,26 @@ module.exports = {
     await user.removeTech(tech);
 
     return res.json();
+  },
+
+  async updade(req, res){
+    const { user_id, id } = req.params;
+    const { name } = req.body;
+
+    const user = await User.findByPk(user_id);
+
+    if(!user){
+      return res.status(400).json({ error: 'User not found' })
+    }
+
+    const tech = await Tech.findByPk(id, {
+      include: { association: 'user'}
+    });
+
+    await tech.update({ name }, {
+      where: { 'id': id}
+    })
+
+    return res.json(tech)
   }
 };

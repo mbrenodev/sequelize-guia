@@ -3,13 +3,18 @@ const User = require("../models/User");
 
 module.exports = {
   async index(req, res){
-    const { user_id } = req.params
+    const { user_id } = req.params;
+
     const user = await User.findByPk(user_id, {
       include: { association: 'addresses'}
-    })
+    });
+
+    if(!user){
+      return res.status(400).json({ error: 'User not found' });
+    }
 
     // return res.json(user)
-    return res.json(user.addresses)
+    return res.json(user)
   },
 
   async store(req, res){
@@ -30,5 +35,48 @@ module.exports = {
     })
 
     return res.json(address)
-  }
+  },
+
+  async delete(req, res){
+    const { user_id, id } = req.params;
+    const user = await User.findByPk(user_id);
+
+    if(!user){
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    const address = await Address.findOne({
+      where: { id }
+    });
+
+    if(!address){
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    await address.destroy(address);
+    return res.json();
+  },
+
+  async update(req, res){
+    const { user_id, id } = req.params;
+    const { zipcode, street, number } = req.body;
+
+    const user = await User.findByPk(user_id, {
+      include: { association: 'addresses'}
+    });
+
+    if(!user){
+      return res.status(400).json({ error: 'User not found' });
+    }
+
+    const address = await Address.findByPk(id, {
+      include: { association: 'user'}
+    });
+
+    await address.update({ zipcode, street, number}, {
+      where: { 'id': id}
+    })
+
+    return res.json(address)
+  } 
 };
