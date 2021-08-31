@@ -39,21 +39,19 @@ module.exports = {
 
   async delete(req, res){
     const { user_id, id } = req.params;
+    
     const user = await User.findByPk(user_id);
-
-    if(!user){
-      return res.status(400).json({ error: 'User not found' });
-    }
-
+    
     const address = await Address.findOne({
       where: { id }
     });
 
-    if(!address){
+    if(!user || !address){
       return res.status(400).json({ error: 'User not found' });
     }
 
     await address.destroy(address);
+
     return res.json();
   },
 
@@ -65,13 +63,13 @@ module.exports = {
       include: { association: 'addresses'}
     });
 
-    if(!user){
-      return res.status(400).json({ error: 'User not found' });
-    }
-
     const address = await Address.findByPk(id, {
       include: { association: 'user'}
     });
+    
+    if(!user || !address){
+      return res.status(400).json({ error: 'User not found' });
+    }
 
     await address.update({ zipcode, street, number}, {
       where: { 'id': id}

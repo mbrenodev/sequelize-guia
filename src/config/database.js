@@ -2,7 +2,7 @@ module.exports = {
   dialect: 'mysql',
   host: 'localhost',
   username: 'root',
-  password: 'adm.8527410',
+  password: '123456',
   database: 'appcontrol',
   define: {
     timestamps: true,

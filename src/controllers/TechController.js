@@ -5,14 +5,13 @@ module.exports = {
   async index(req, res){
     const { user_id } = req.params;
 
-   
     const user = await User.findByPk(user_id, {
       // include: { association: 'techs'}
       include: { 
         association: 'techs',
-        attributes: ['name'], 
+        attributes: ['id', 'name'], 
         through: { 
-          attributes: ['user_id'] 
+          attributes: ['user_id']    
         }
       }
     })
@@ -44,20 +43,21 @@ module.exports = {
   },
 
   async delete(req, res){
-    const { user_id } = req.params;
-    const { name } = req.body;
+    const { user_id, id } = req.params;
 
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(user_id, {
+      include: { association: 'techs'}
+    });
+    
+    const tech = await Tech.findByPk(id, {
+      include: { association: 'users'}
+    });
 
-    if(!user){
+    if(!user || !tech){
       return res.status(400).json({ error: 'User not found' })
     }
 
-    const tech = await Tech.findOne({
-      where: { name }
-    });
-
-    await user.removeTech(tech);
+    await tech.destroy(tech);
 
     return res.json();
   },
@@ -66,15 +66,17 @@ module.exports = {
     const { user_id, id } = req.params;
     const { name } = req.body;
 
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(user_id, {
+      include: { association: 'techs'}
+    });
+    
+    const tech = await Tech.findByPk(id, {
+      include: { association: 'users'}
+    });
 
-    if(!user){
+    if(!user || !tech){
       return res.status(400).json({ error: 'User not found' })
     }
-
-    const tech = await Tech.findByPk(id, {
-      include: { association: 'user'}
-    });
 
     await tech.update({ name }, {
       where: { 'id': id}

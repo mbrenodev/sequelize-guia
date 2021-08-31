@@ -7,14 +7,14 @@ module.exports = {
       attributes: ['name', 'email'],
       where: {
         email: {
-          [Op.like]: '%@vltechautomacao.com.br' 
+          [Op.like]: '%@hotmail.com' 
         }
       },
       include: [
         { 
           association: 'addresses',
           attributes: ['street', 'zipcode', 'number'], 
-          where: { street: 'Av Rio Tocantins' }},
+          where: { street: 'Rua Rio Negro' }},
         { 
           association: 'techs',
           attributes: ['name'],
@@ -24,7 +24,7 @@ module.exports = {
           },
           where: {
             name: {
-              [Op.like]: 'Delphi%' 
+              [Op.like]: 'JavaScript%' 
             }
           }
         }

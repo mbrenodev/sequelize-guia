@@ -20,7 +20,7 @@ routes.delete('/users/:user_id/addresses/:id', AddressController.delete);
 routes.get('/users/:user_id/techs', TechController.index);
 routes.post('/users/:user_id/techs', TechController.store);
 routes.put('/users/:user_id/techs/:id', TechController.updade);
-routes.delete('/users/:user_id/techs', TechController.delete);
+routes.delete('/users/:user_id/techs/:id', TechController.delete);
 
 routes.get('/report', ReportController.show);
 
