@@ -1,9 +1,9 @@
 module.exports = {
-  dialect: 'mysql',
-  host: 'localhost',
-  username: 'root',
-  password: '123456',
-  database: 'appcontrol',
+  dialect: process.env.DIALECT,
+  host: process.env.HOST,
+  username: process.env.LOGIN,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
   define: {
     timestamps: true,
     underscored: true,
